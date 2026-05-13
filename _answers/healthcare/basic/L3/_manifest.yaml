@@ -1,0 +1,324 @@
+vertical: healthcare
+size: basic
+level: L3
+period_start: '2025-01-01'
+period_end: '2025-12-31'
+seed: 20260513
+n_tables: 13
+tables:
+  chart_of_accounts:
+    rows: 31
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - parent_account_id
+    - is_active
+  journal_entries:
+    rows: 2408
+    columns:
+    - entry_id
+    - entry_date
+    - account_id
+    - debit
+    - credit
+    - memo
+    - posted_by
+    - posted_at
+  trial_balance:
+    rows: 31
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - period_end
+    - debit_balance
+    - credit_balance
+  customers:
+    rows: 80
+    columns:
+    - customer_id
+    - customer_name
+    - customer_type
+    - tax_id
+    - email
+    - phone
+    - billing_country
+    - credit_limit
+    - created_at
+    - is_active
+  vendors:
+    rows: 41
+    columns:
+    - vendor_id
+    - vendor_name
+    - tax_id
+    - payment_terms
+    - bank_account_last4
+    - contact_email
+    - country
+    - is_1099
+    - created_at
+    - is_active
+  ar_invoices:
+    rows: 400
+    columns:
+    - invoice_id
+    - customer_id
+    - invoice_date
+    - due_date
+    - amount
+    - paid_amount
+    - balance
+    - status
+    - currency
+  ap_invoices:
+    rows: 240
+    columns:
+    - bill_id
+    - vendor_id
+    - invoice_number
+    - invoice_date
+    - due_date
+    - po_number
+    - amount
+    - paid_amount
+    - balance
+    - status
+    - approved_by
+  ar_aging:
+    rows: 63
+    columns:
+    - customer_id
+    - as_of_date
+    - current
+    - d_1_30
+    - d_31_60
+    - d_61_90
+    - over_90
+    - total
+  ap_aging:
+    rows: 32
+    columns:
+    - vendor_id
+    - as_of_date
+    - current
+    - d_1_30
+    - d_31_60
+    - d_61_90
+    - over_90
+    - total
+  inventory_items:
+    rows: 120
+    columns:
+    - sku
+    - description
+    - category
+    - unit_cost
+    - on_hand_qty
+    - reorder_point
+    - last_received_date
+  payroll_summary:
+    rows: 21
+    columns:
+    - employee_id
+    - employee_name
+    - department
+    - hire_date
+    - termination_date
+    - ytd_gross_pay
+    - ytd_taxes_withheld
+    - last_pay_date
+    - is_active
+    - username
+  payers:
+    rows: 12
+    columns:
+    - payer_id
+    - payer_name
+    - payer_type
+    - contractual_allowance_pct
+  claims:
+    rows: 1600
+    columns:
+    - claim_id
+    - patient_id
+    - payer_id
+    - service_date
+    - billed_amount
+    - allowed_amount
+    - paid_amount
+    - adjustment_amount
+    - status
+traps:
+- trap_id: da5159fb03
+  table: journal_entries
+  column: debit
+  row_keys:
+  - JE-2025000238
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: negative_debit
+  description: Debit amount is negative; debits should be non-negative.
+  expected_finding: Flag negative debit in journal_entries.
+- trap_id: ea93212e7a
+  table: journal_entries
+  column: entry_date
+  row_keys:
+  - JE-2025000447
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: future_dated_entry
+  description: Entry dated after fiscal-year end.
+  expected_finding: Flag JE with entry_date > period_end.
+- trap_id: 72fa0e269e
+  table: chart_of_accounts
+  column: account_type
+  row_keys:
+  - '5000'
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: missing_account_type
+  description: Account with blank type cannot be classified for financial statements.
+  expected_finding: Flag account with missing account_type.
+- trap_id: 472158fa00
+  table: ap_invoices
+  column: amount
+  row_keys:
+  - BILL-2025000134
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: zero_amount_open_invoice
+  description: AP invoice has zero amount but open status.
+  expected_finding: Flag zero-amount bills marked open.
+- trap_id: af37c08982
+  table: vendors
+  column: tax_id
+  row_keys:
+  - VEND-00027
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: missing_tax_id
+  description: 1099-eligible vendor lacks a tax ID.
+  expected_finding: Flag vendor with empty tax_id.
+- trap_id: c0a00e4f4b
+  table: inventory_items
+  column: on_hand_qty
+  row_keys:
+  - SKU-000022
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: negative_inventory
+  description: Physical on-hand quantity cannot be negative.
+  expected_finding: Flag SKU with negative on_hand_qty.
+- trap_id: 086f7a57f4
+  table: ar_invoices
+  column: due_date
+  row_keys:
+  - INV-2025000358
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: due_before_invoice
+  description: Invoice due_date precedes invoice_date.
+  expected_finding: Flag invoices where due_date < invoice_date.
+- trap_id: baabaa5287
+  table: ap_invoices
+  column: po_number
+  row_keys:
+  - BILL-2025000102
+  detectability: moderate
+  severity: control_weakness
+  scope: cross_column
+  trap_class: three_way_match_miss
+  description: Material AP invoice booked without a PO reference.
+  expected_finding: Flag AP invoices with amount > threshold and blank po_number.
+- trap_id: 9c2d676bc1
+  table: vendors
+  column: vendor_name
+  row_keys:
+  - VEND-00021
+  - VEND-00041
+  detectability: moderate
+  severity: control_weakness
+  scope: cross_column
+  trap_class: duplicate_vendor_variant
+  description: Two vendor records with near-identical name and same bank_account_last4.
+  expected_finding: Fuzzy-match vendor_name within identical bank_account_last4.
+- trap_id: fd515c63f3
+  table: ar_aging
+  column: total
+  row_keys:
+  - CUST-00034
+  detectability: moderate
+  severity: control_weakness
+  scope: cross_column
+  trap_class: aging_sum_mismatch
+  description: AR aging total != sum of bucket columns.
+  expected_finding: Check current + d_1_30 + d_31_60 + d_61_90 + over_90 == total.
+- trap_id: 35d1d77ee1
+  table: ar_invoices
+  column: invoice_date
+  row_keys:
+  - INV-2025000274
+  - INV-2025000202
+  - INV-2025000285
+  - INV-2025000049
+  - INV-2025000334
+  - INV-2025000374
+  detectability: moderate
+  severity: control_weakness
+  scope: cross_column
+  trap_class: sales_cutoff_spike
+  description: Concentrated, oversized invoices dated in the last 3 days of FY.
+  expected_finding: Histogram invoice_date near period-end; flag size+date co-spike.
+- trap_id: 7032963c90
+  table: payroll_summary
+  column: hire_date
+  row_keys:
+  - EMP-00010
+  detectability: moderate
+  severity: control_weakness
+  scope: cross_column
+  trap_class: future_hire_date
+  description: Active employee with hire_date after period end is being paid YTD.
+  expected_finding: Flag is_active=True with hire_date > period_end and ytd_gross_pay
+    > 0.
+- trap_id: 9a82c90875
+  table: journal_entries
+  column: posted_by
+  row_keys:
+  - JE-2025900000
+  - JE-2025900001
+  - JE-2025900002
+  - JE-2025900003
+  detectability: subtle
+  severity: material_misstatement
+  scope: cross_table
+  trap_class: round_dollar_terminated_user
+  description: Round-dollar JEs in the final 2 days of FY posted by a user whose termination_date
+    precedes the post date (cross-check journal_entries.posted_by against payroll_summary.username
+    + termination_date).
+  expected_finding: Join journal_entries to payroll_summary on posted_by==username;
+    flag entries where entry_date > termination_date.
+- trap_id: 6f07278a6a
+  table: claims
+  column: allowed_amount
+  row_keys:
+  - CLM-20250001099
+  - CLM-20250000351
+  - CLM-20250001229
+  - CLM-20250001500
+  - CLM-20250001409
+  detectability: subtle
+  severity: material_misstatement
+  scope: cross_period
+  trap_class: contractual_allowance_q4_anomaly
+  description: Q4 allowed/billed ratio jumps far above Q1-Q3 baseline.
+  expected_finding: Compare per-payer allowed/billed by quarter; flag Q4 outliers.

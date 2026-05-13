@@ -1,0 +1,5 @@
+store_id,store_name,city,opening_date,square_feet,is_active
+ST-001,Store #1,Seattle,2013-11-26,6973,True
+ST-002,Store #2,SF,2013-01-04,11800,True
+ST-003,Store #3,Houston,2021-10-11,15266,True
+ST-004,Store #4,Phoenix,2019-06-14,8736,True

@@ -1,0 +1,32 @@
+account_id,account_name,account_type,period_end,debit_balance,credit_balance
+1000,Cash - Operating,asset,2025-12-31,43654.38,0.0
+1010,Cash - Payroll,asset,2025-12-31,124312.16,0.0
+1100,Accounts Receivable,asset,2025-12-31,101900.25,0.0
+1105,Allowance for Doubtful Accounts,asset,2025-12-31,82538.19,0.0
+1200,Inventory,asset,2025-12-31,108698.26,0.0
+1300,Prepaid Expenses,asset,2025-12-31,91156.2,0.0
+1500,"Property, Plant & Equipment",asset,2025-12-31,117230.03,0.0
+1510,Accumulated Depreciation,asset,2025-12-31,109141.27,0.0
+2000,Accounts Payable,liability,2025-12-31,0.0,126668.08
+2100,Accrued Liabilities,liability,2025-12-31,0.0,124781.33
+2200,Deferred Revenue,liability,2025-12-31,0.0,220077.54
+2300,Income Tax Payable,liability,2025-12-31,0.0,163965.84
+2500,Long-Term Debt,liability,2025-12-31,0.0,192286.91
+3000,Common Stock,equity,2025-12-31,0.0,0.0
+3100,Retained Earnings,equity,2025-12-31,0.0,0.0
+4000,Revenue,revenue,2025-12-31,0.0,371100.17
+4100,Sales Returns & Allowances,revenue,2025-12-31,0.0,380223.11
+5000,Cost of Goods Sold,expense,2025-12-31,127756.86,0.0
+6000,Salaries & Wages,expense,2025-12-31,148852.61,0.0
+6100,Rent Expense,expense,2025-12-31,97489.98,0.0
+6200,Utilities,expense,2025-12-31,126913.95,0.0
+6300,Professional Fees,expense,2025-12-31,156501.33,0.0
+6400,Depreciation Expense,expense,2025-12-31,153758.56,0.0
+6500,Bad Debt Expense,expense,2025-12-31,193233.38,0.0
+1101,Patient Accounts Receivable,asset,2025-12-31,59856.67,0.0
+1106,Contractual Allowance,asset,2025-12-31,53767.91,0.0
+1107,Bad Debt Reserve - Patient,asset,2025-12-31,80935.46,0.0
+4030,Net Patient Service Revenue,revenue,2025-12-31,0.0,354832.03
+4040,Capitation Revenue,revenue,2025-12-31,0.0,383741.52
+6010,Provider Compensation,expense,2025-12-31,158110.52,0.0
+6020,Medical Supplies,expense,2025-12-31,181868.56,0.0

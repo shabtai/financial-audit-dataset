@@ -1,0 +1,9 @@
+store_id,store_name,city,opening_date,square_feet,is_active
+ST-001,Store #1,NYC,2012-07-22,17223,True
+ST-002,Store #2,NYC,2020-05-24,16852,True
+ST-003,Store #3,Houston,2017-02-06,16586,True
+ST-004,Store #4,Chicago,2024-05-24,15983,True
+ST-005,Store #5,Houston,2017-09-12,13677,True
+ST-006,Store #6,Philly,2013-11-19,15205,True
+ST-007,Store #7,LA,2018-08-13,10977,True
+ST-008,Store #8,NYC,2017-08-14,3225,True

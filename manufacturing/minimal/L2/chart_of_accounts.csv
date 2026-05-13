@@ -1,0 +1,25 @@
+account_id,account_name,account_type,parent_account_id,is_active
+1000,Cash - Operating,asset,,True
+1010,Cash - Payroll,asset,,True
+1100,Accounts Receivable,asset,,True
+1105,Allowance for Doubtful Accounts,asset,1100,True
+1200,Inventory,asset,,True
+1300,Prepaid Expenses,asset,,True
+1500,"Property, Plant & Equipment",,,True
+1510,Accumulated Depreciation,asset,1500,True
+2000,Accounts Payable,liability,,True
+2100,Accrued Liabilities,liability,,True
+2200,Deferred Revenue,liability,,True
+2300,Income Tax Payable,liability,,True
+2500,Long-Term Debt,liability,,True
+3000,Common Stock,equity,,True
+3100,Retained Earnings,equity,,True
+4000,Revenue,revenue,,True
+4100,Sales Returns & Allowances,revenue,4000,True
+5000,Cost of Goods Sold,expense,,True
+6000,Salaries & Wages,expense,,True
+6100,Rent Expense,expense,,True
+6200,Utilities,expense,,True
+6300,Professional Fees,expense,,True
+6400,Depreciation Expense,expense,,True
+6500,Bad Debt Expense,expense,,True

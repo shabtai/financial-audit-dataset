@@ -1,0 +1,98 @@
+vertical: saas
+size: minimal
+level: L3
+period_start: '2025-01-01'
+period_end: '2025-12-31'
+seed: 20260513
+n_tables: 3
+tables:
+  chart_of_accounts:
+    rows: 24
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - parent_account_id
+    - is_active
+  journal_entries:
+    rows: 208
+    columns:
+    - entry_id
+    - entry_date
+    - account_id
+    - debit
+    - credit
+    - memo
+    - posted_by
+    - posted_at
+  trial_balance:
+    rows: 24
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - period_end
+    - debit_balance
+    - credit_balance
+traps:
+- trap_id: 109a756257
+  table: journal_entries
+  column: debit
+  row_keys:
+  - JE-2025000044
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: negative_debit
+  description: Debit amount is negative; debits should be non-negative.
+  expected_finding: Flag negative debit in journal_entries.
+- trap_id: 3823fec667
+  table: journal_entries
+  column: entry_date
+  row_keys:
+  - JE-2025000081
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: future_dated_entry
+  description: Entry dated after fiscal-year end.
+  expected_finding: Flag JE with entry_date > period_end.
+- trap_id: cd1aff3da0
+  table: chart_of_accounts
+  column: account_type
+  row_keys:
+  - '2000'
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: missing_account_type
+  description: Account with blank type cannot be classified for financial statements.
+  expected_finding: Flag account with missing account_type.
+- trap_id: 75c5344d37
+  table: journal_entries
+  column: debit/credit
+  row_keys:
+  - JE-2025000053
+  detectability: moderate
+  severity: control_weakness
+  scope: cross_column
+  trap_class: unbalanced_je
+  description: Debit and credit legs of the same entry don't tie.
+  expected_finding: Group by entry_id; sum(debit) != sum(credit).
+- trap_id: afd910b637
+  table: journal_entries
+  column: posted_by
+  row_keys:
+  - JE-2025900000
+  - JE-2025900001
+  - JE-2025900002
+  - JE-2025900003
+  detectability: subtle
+  severity: material_misstatement
+  scope: cross_table
+  trap_class: round_dollar_terminated_user
+  description: Round-dollar JEs in the final 2 days of FY posted by a user whose termination_date
+    precedes the post date (cross-check journal_entries.posted_by against payroll_summary.username
+    + termination_date).
+  expected_finding: Join journal_entries to payroll_summary on posted_by==username;
+    flag entries where entry_date > termination_date.

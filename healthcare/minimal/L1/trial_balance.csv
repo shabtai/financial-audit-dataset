@@ -1,0 +1,25 @@
+account_id,account_name,account_type,period_end,debit_balance,credit_balance
+1000,Cash - Operating,asset,2025-12-31,1774.88,0.0
+1010,Cash - Payroll,asset,2025-12-31,8561.56,0.0
+1100,Accounts Receivable,asset,2025-12-31,2960.61,0.0
+1105,Allowance for Doubtful Accounts,asset,2025-12-31,3495.88,0.0
+1200,Inventory,asset,2025-12-31,16620.85,0.0
+1300,Prepaid Expenses,asset,2025-12-31,4072.54,0.0
+1500,"Property, Plant & Equipment",asset,2025-12-31,7400.23,0.0
+1510,Accumulated Depreciation,asset,2025-12-31,2528.99,0.0
+2000,Accounts Payable,liability,2025-12-31,0.0,546.24
+2100,Accrued Liabilities,liability,2025-12-31,0.0,6032.27
+2200,Deferred Revenue,liability,2025-12-31,0.0,461.51
+2300,Income Tax Payable,liability,2025-12-31,0.0,8112.61
+2500,Long-Term Debt,liability,2025-12-31,0.0,360.11
+3000,Common Stock,equity,2025-12-31,0.0,0.0
+3100,Retained Earnings,equity,2025-12-31,0.0,0.0
+4000,Revenue,revenue,2025-12-31,0.0,33892.99
+4100,Sales Returns & Allowances,revenue,2025-12-31,0.0,26109.65
+5000,Cost of Goods Sold,expense,2025-12-31,1658.8,0.0
+6000,Salaries & Wages,expense,2025-12-31,2311.39,0.0
+6100,Rent Expense,expense,2025-12-31,1955.89,0.0
+6200,Utilities,expense,2025-12-31,4670.44,0.0
+6300,Professional Fees,expense,2025-12-31,3736.52,0.0
+6400,Depreciation Expense,expense,2025-12-31,1321.07,0.0
+6500,Bad Debt Expense,expense,2025-12-31,12445.73,0.0

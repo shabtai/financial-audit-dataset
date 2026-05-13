@@ -1,0 +1,70 @@
+vertical: saas
+size: minimal
+level: L1
+period_start: '2025-01-01'
+period_end: '2025-12-31'
+seed: 20260513
+n_tables: 3
+tables:
+  chart_of_accounts:
+    rows: 24
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - parent_account_id
+    - is_active
+  journal_entries:
+    rows: 200
+    columns:
+    - entry_id
+    - entry_date
+    - account_id
+    - debit
+    - credit
+    - memo
+    - posted_by
+    - posted_at
+  trial_balance:
+    rows: 24
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - period_end
+    - debit_balance
+    - credit_balance
+traps:
+- trap_id: 8aca87885c
+  table: journal_entries
+  column: debit
+  row_keys:
+  - JE-2025000084
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: negative_debit
+  description: Debit amount is negative; debits should be non-negative.
+  expected_finding: Flag negative debit in journal_entries.
+- trap_id: 3cb67b325a
+  table: journal_entries
+  column: entry_date
+  row_keys:
+  - JE-2025000028
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: future_dated_entry
+  description: Entry dated after fiscal-year end.
+  expected_finding: Flag JE with entry_date > period_end.
+- trap_id: e8f834b479
+  table: chart_of_accounts
+  column: account_type
+  row_keys:
+  - '4000'
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: missing_account_type
+  description: Account with blank type cannot be classified for financial statements.
+  expected_finding: Flag account with missing account_type.

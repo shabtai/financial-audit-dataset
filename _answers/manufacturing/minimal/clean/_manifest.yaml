@@ -1,0 +1,37 @@
+vertical: manufacturing
+size: minimal
+level: clean
+period_start: '2025-01-01'
+period_end: '2025-12-31'
+seed: 20260513
+n_tables: 3
+tables:
+  chart_of_accounts:
+    rows: 24
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - parent_account_id
+    - is_active
+  journal_entries:
+    rows: 200
+    columns:
+    - entry_id
+    - entry_date
+    - account_id
+    - debit
+    - credit
+    - memo
+    - posted_by
+    - posted_at
+  trial_balance:
+    rows: 24
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - period_end
+    - debit_balance
+    - credit_balance
+traps: []

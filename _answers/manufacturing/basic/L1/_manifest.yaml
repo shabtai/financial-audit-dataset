@@ -1,0 +1,230 @@
+vertical: manufacturing
+size: basic
+level: L1
+period_start: '2025-01-01'
+period_end: '2025-12-31'
+seed: 20260513
+n_tables: 13
+tables:
+  chart_of_accounts:
+    rows: 31
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - parent_account_id
+    - is_active
+  journal_entries:
+    rows: 2400
+    columns:
+    - entry_id
+    - entry_date
+    - account_id
+    - debit
+    - credit
+    - memo
+    - posted_by
+    - posted_at
+  trial_balance:
+    rows: 31
+    columns:
+    - account_id
+    - account_name
+    - account_type
+    - period_end
+    - debit_balance
+    - credit_balance
+  customers:
+    rows: 80
+    columns:
+    - customer_id
+    - customer_name
+    - customer_type
+    - tax_id
+    - email
+    - phone
+    - billing_country
+    - credit_limit
+    - created_at
+    - is_active
+  vendors:
+    rows: 40
+    columns:
+    - vendor_id
+    - vendor_name
+    - tax_id
+    - payment_terms
+    - bank_account_last4
+    - contact_email
+    - country
+    - is_1099
+    - created_at
+    - is_active
+  ar_invoices:
+    rows: 400
+    columns:
+    - invoice_id
+    - customer_id
+    - invoice_date
+    - due_date
+    - amount
+    - paid_amount
+    - balance
+    - status
+    - currency
+  ap_invoices:
+    rows: 240
+    columns:
+    - bill_id
+    - vendor_id
+    - invoice_number
+    - invoice_date
+    - due_date
+    - po_number
+    - amount
+    - paid_amount
+    - balance
+    - status
+    - approved_by
+  ar_aging:
+    rows: 60
+    columns:
+    - customer_id
+    - as_of_date
+    - current
+    - d_1_30
+    - d_31_60
+    - d_61_90
+    - over_90
+    - total
+  ap_aging:
+    rows: 34
+    columns:
+    - vendor_id
+    - as_of_date
+    - current
+    - d_1_30
+    - d_31_60
+    - d_61_90
+    - over_90
+    - total
+  inventory_items:
+    rows: 120
+    columns:
+    - sku
+    - description
+    - category
+    - unit_cost
+    - on_hand_qty
+    - reorder_point
+    - last_received_date
+  payroll_summary:
+    rows: 20
+    columns:
+    - employee_id
+    - employee_name
+    - department
+    - hire_date
+    - termination_date
+    - ytd_gross_pay
+    - ytd_taxes_withheld
+    - last_pay_date
+    - is_active
+  work_orders:
+    rows: 60
+    columns:
+    - work_order_id
+    - product_sku
+    - qty_planned
+    - qty_produced
+    - start_date
+    - completion_date
+    - standard_cost_per_unit
+    - actual_cost_per_unit
+    - status
+  bom:
+    rows: 360
+    columns:
+    - bom_id
+    - parent_sku
+    - component_sku
+    - qty_per_parent
+    - effective_date
+traps:
+- trap_id: ae91a2c4f5
+  table: journal_entries
+  column: debit
+  row_keys:
+  - JE-2025000367
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: negative_debit
+  description: Debit amount is negative; debits should be non-negative.
+  expected_finding: Flag negative debit in journal_entries.
+- trap_id: 547d5345c7
+  table: journal_entries
+  column: entry_date
+  row_keys:
+  - JE-2025000966
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: future_dated_entry
+  description: Entry dated after fiscal-year end.
+  expected_finding: Flag JE with entry_date > period_end.
+- trap_id: 84ff1072ec
+  table: chart_of_accounts
+  column: account_type
+  row_keys:
+  - '1200'
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: missing_account_type
+  description: Account with blank type cannot be classified for financial statements.
+  expected_finding: Flag account with missing account_type.
+- trap_id: 59283c0206
+  table: ap_invoices
+  column: amount
+  row_keys:
+  - BILL-2025000020
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: zero_amount_open_invoice
+  description: AP invoice has zero amount but open status.
+  expected_finding: Flag zero-amount bills marked open.
+- trap_id: b17e5e717e
+  table: vendors
+  column: tax_id
+  row_keys:
+  - VEND-00032
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: missing_tax_id
+  description: 1099-eligible vendor lacks a tax ID.
+  expected_finding: Flag vendor with empty tax_id.
+- trap_id: abdc01e265
+  table: inventory_items
+  column: on_hand_qty
+  row_keys:
+  - SKU-000009
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: negative_inventory
+  description: Physical on-hand quantity cannot be negative.
+  expected_finding: Flag SKU with negative on_hand_qty.
+- trap_id: b8892f1211
+  table: ar_invoices
+  column: due_date
+  row_keys:
+  - INV-2025000068
+  detectability: obvious
+  severity: data_quality
+  scope: single_column
+  trap_class: due_before_invoice
+  description: Invoice due_date precedes invoice_date.
+  expected_finding: Flag invoices where due_date < invoice_date.
